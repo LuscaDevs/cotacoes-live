@@ -1,35 +1,44 @@
-import { StatusBar, KeyboardAvoidingView, ScrollView, Platform, View, KeyboardAvoidingViewBase, TouchableWithoutFeedback } from 'react-native';
-import { Alert, Text, TextInput, TouchableOpacity } from 'react-native';
-import StockQuote from './StockQuote';
-import styled from 'styled-components/native';
+// App.tsx
+
 import React, { useState } from 'react';
-import AddStock from './AddStock';
+import { ScrollView, View, KeyboardAvoidingView, Platform, Text } from 'react-native';
+import styled from 'styled-components/native';
+import StockQuote from './src/StockQuote';
+import AddStock from './src/AddStock';
 
-export default function App() {
-  const apiKey = 'IWOK33HKCS8IRUUU';
+interface Stock {
+  symbol: string;
+}
 
-  const TitleText = styled.Text`
-    font-size: 22px;
-    font-weight: bold;
-    color: #333;
-    align-self: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  `;
+const TitleText = styled.Text`
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  align-self: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
 
-  const ContainerApp = styled.KeyboardAvoidingView`
-    flex: 1;
-    background-color: #fff;
-    margin-top: 40px;
-    justify-content: space-between;
-  `;
+const ContainerApp = styled.KeyboardAvoidingView`
+  flex: 1;
+  background-color: #fff;
+  margin-top: 40px;
+  justify-content: space-between;
+`;
 
-  const ContainerStocks = styled.View`
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-left: 10px;
-    justify-content: center;
-  `;
+const ContainerStocks = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: 10px;
+  justify-content: center;
+`;
+
+const App = () => {
+  const [stocksList, setStocksList] = useState<Stock[]>([]);
+
+  const updateDataList = (newList: Stock[]) => {
+    setStocksList((prevList) => [...prevList, ...newList]);
+  };
 
   return (
     <ContainerApp behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -37,17 +46,18 @@ export default function App() {
 
       <ScrollView>
         <ContainerStocks>
-          {/* <StockQuote symbol='PETR4.SA' apiKey={apiKey} updateInterval={60000} />
-            <StockQuote symbol='CSAN3.SA' apiKey={apiKey} updateInterval={60000} />
-            <StockQuote symbol='AURE3.SA' apiKey={apiKey} updateInterval={60000} />
-            <StockQuote symbol='PETR4.SA' apiKey={apiKey} updateInterval={60000} />
-            <StockQuote symbol='CSAN3.SA' apiKey={apiKey} updateInterval={60000} />
-            <StockQuote symbol='AURE3.SA' apiKey={apiKey} updateInterval={60000} /> */}
+          {stocksList.map((stock, index) => (
+            <StockQuote
+              key={index}
+              symbol={stock.symbol}
+            />
+          ))}
         </ContainerStocks>
       </ScrollView>
 
-      <AddStock />
-
+      <AddStock updateDataList={updateDataList} />
     </ContainerApp>
   );
-}
+};
+
+export default App;
