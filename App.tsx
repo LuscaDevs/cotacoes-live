@@ -5,6 +5,7 @@ import { ScrollView, View, KeyboardAvoidingView, Platform, Text } from 'react-na
 import styled from 'styled-components/native';
 import StockQuote from './src/StockQuote';
 import AddStock from './src/AddStock';
+import BrapiAvaiableStocks from './src/BrapiAvaiableStocks';
 
 interface Stock {
   symbol: string;
@@ -57,6 +58,7 @@ const App = () => {
 
       <AddStock updateDataList={updateDataList} />
     </ContainerApp>
+
   );
 };
 

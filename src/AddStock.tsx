@@ -1,9 +1,10 @@
 // AddStock.tsx
 
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
+import BrapiAvaiableStocks from './BrapiAvaiableStocks';
 
 const ContainerAddStock = styled.View`
   flex-direction: column;
@@ -26,11 +27,6 @@ const StockListView = styled.TouchableOpacity`
   margin-bottom: 5px;
 `;
 
-interface Ticker {
-  '1. symbol': string;
-  '2. name': string;
-}
-
 interface SelectedTicker {
   symbol: string;
   name: string;
@@ -46,34 +42,36 @@ interface AddStockProps {
 
 const AddStock: React.FC<AddStockProps> = ({ updateDataList }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [tickers, setTickers] = useState<Ticker[]>([]);
-  const [selectedTicker, setSelectedTicker] = useState<SelectedTicker | null>(null);
+  const [tickers, setTickers] = useState<string[]>([]);
+  const [filteredTickers, setFilteredTickers] = useState<string[]>([]);
+  const [selectedTicker, setSelectedTicker] = useState('');
   const apiKey = 'IWOK33HKCS8IRUUU';
 
-  const handleSearchChange = async (text: string) => {
-    setSearchTerm(text);
-
+  async function getTickerList() {
     try {
-      const response = await axios.get(
-        `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${text}&apikey=${apiKey}`
-      );
-
-      const searchResults: Ticker[] = response.data.bestMatches;
-
-      setTickers(searchResults);
+      const tickers = await BrapiAvaiableStocks();
+      setTickers(tickers.sort());
     } catch (error) {
-      console.error('Erro ao buscar símbolos:', error);
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
+    getTickerList();
+
+  }, []);
+
+  const handleSearchChange = (text: string) => {
+    setSearchTerm(text);
+    const filtered = tickers.filter(ticker => ticker.includes(searchTerm.toUpperCase()));
+    setFilteredTickers(filtered);
   };
 
-  const handleSelectTicker = (ticker: Ticker) => {
-    setSelectedTicker({
-      symbol: ticker['1. symbol'],
-      name: ticker['2. name'],
-    });
+  const handleSelectTicker = (ticker: string) => {
+    setSelectedTicker(ticker);
 
     const newStock: Stock = {
-      symbol: ticker['1. symbol'],
+      symbol: ticker,
     };
 
     updateDataList([newStock]);
@@ -83,13 +81,12 @@ const AddStock: React.FC<AddStockProps> = ({ updateDataList }) => {
   return (
     <ContainerAddStock>
       {searchTerm ? <FlatList
-        data={tickers}
-        keyExtractor={(item) => item['1. symbol']}
+        data={filteredTickers}
+        keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <StockListView onPress={() => handleSelectTicker(item)}>
             <View>
-              <Text>{item['1. symbol']}</Text>
-              <Text>{item['2. name']}</Text>
+              <Text>{item}</Text>
             </View>
           </StockListView>
         )}

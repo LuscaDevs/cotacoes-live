@@ -6,7 +6,7 @@ interface StockQuoteProps {
     symbol: string; // Símbolo do ativo (ex: PETR4.SA)
 }
 
-const StockQuoteContainer = styled.View`
+const StockQuoteContainer = styled.TouchableOpacity`
   padding: 10px;
   margin: 10px;
   border-radius: 50px;
@@ -30,15 +30,14 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
         const fetchQuote = async () => {
             try {
                 const response = await axios.get(
-                    `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`
+                    `https://brapi.dev/api/quote/${symbol}`
                 );
 
-                const quoteData = response.data['Global Quote'];
+                const quoteData = response.data.results[0];
 
                 if (quoteData && isMounted) {
-                    const price = parseFloat(quoteData['05. price']);
 
-                    setQuote(price);
+                    setQuote(quoteData.regularMarketPrice);
                 }
             } catch (error) {
                 console.error('Erro ao buscar a cotação do ativo:', error);
@@ -46,12 +45,8 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
         };
 
         fetchQuote();
-
-        const intervalId = setInterval(fetchQuote);
-
         return () => {
             isMounted = false;
-            clearInterval(intervalId);
         };
     }, [symbol]);
 
