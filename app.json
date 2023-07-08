@@ -15,7 +15,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "icon": {
+          "tintColor": "transparent"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {

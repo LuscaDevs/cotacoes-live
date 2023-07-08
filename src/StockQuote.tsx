@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components/native';
-import { Trending } from './TrendIcon';
+import { Trending } from '../assets/TrendIcon';
+import { Text } from 'react-native';
 
 interface StockQuoteProps {
     symbol: string; // Símbolo do ativo (ex: PETR4)
@@ -30,9 +31,15 @@ const StockQuoteSubText = styled.Text`
   margin-bottom: 20px;
 `;
 
-const StockQuoteChange = styled.View<StockQuoteChangeProps>`
+const StockQuoteChange = styled.View`
   font-size: 12px;
-  color: ${({ changeValue }) => {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StockQuoteVariation = styled.Text<StockQuoteChangeProps>`
+    color: ${({ changeValue }) => {
         if (changeValue > 0) {
             return 'green';
         } else if (changeValue < 0) {
@@ -41,11 +48,7 @@ const StockQuoteChange = styled.View<StockQuoteChangeProps>`
             return '#6d6969';
         }
     }};
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 `;
-
 
 const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
     const [quote, setQuote] = useState<number | null>(null);
@@ -92,8 +95,8 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
             <StockQuoteText>{stock.symbol}</StockQuoteText>
             <StockQuoteSubText>{stock.shortName}</StockQuoteSubText>
             <StockQuoteText>R$ {quote.toFixed(2)}</StockQuoteText>
-            <StockQuoteChange changeValue={regularMarketChange}>
-                {regularMarketChange.toFixed(2)}%
+            <StockQuoteChange>
+                <StockQuoteVariation changeValue={regularMarketChange}>{regularMarketChange.toFixed(2)}%</StockQuoteVariation>
                 <Trending changeValue={regularMarketChange} />
             </StockQuoteChange>
 
