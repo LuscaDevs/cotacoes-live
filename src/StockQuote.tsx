@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components/native';
+import { Trending } from './TrendIcon';
 
 interface StockQuoteProps {
     symbol: string; // Símbolo do ativo (ex: PETR4)
@@ -29,10 +30,22 @@ const StockQuoteSubText = styled.Text`
   margin-bottom: 20px;
 `;
 
-const StockQuoteChange = styled.Text<StockQuoteChangeProps>`
+const StockQuoteChange = styled.View<StockQuoteChangeProps>`
   font-size: 12px;
-  color: ${({ changeValue }) => (changeValue > 0 ? 'green' : 'red')};
-  `;
+  color: ${({ changeValue }) => {
+        if (changeValue > 0) {
+            return 'green';
+        } else if (changeValue < 0) {
+            return 'red';
+        } else {
+            return '#6d6969';
+        }
+    }};
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 
 const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
     const [quote, setQuote] = useState<number | null>(null);
@@ -81,7 +94,9 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
             <StockQuoteText>R$ {quote.toFixed(2)}</StockQuoteText>
             <StockQuoteChange changeValue={regularMarketChange}>
                 {regularMarketChange.toFixed(2)}%
+                <Trending changeValue={regularMarketChange} />
             </StockQuoteChange>
+
         </StockQuoteContainer>
     );
 };
