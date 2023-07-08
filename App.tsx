@@ -35,7 +35,7 @@ const ContainerStocks = styled.View`
 `;
 
 const App = () => {
-  const [stocksList, setStocksList] = useState<Stock[]>([]);
+  const [stocksList, setStocksList] = useState<Stock[]>([{ symbol: 'BBDC4' }]);
 
   const updateDataList = (newList: Stock[]) => {
     setStocksList((prevList) => [...prevList, ...newList]);

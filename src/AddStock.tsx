@@ -27,11 +27,6 @@ const StockListView = styled.TouchableOpacity`
   margin-bottom: 5px;
 `;
 
-interface SelectedTicker {
-  symbol: string;
-  name: string;
-}
-
 interface Stock {
   symbol: string;
 }
@@ -45,7 +40,6 @@ const AddStock: React.FC<AddStockProps> = ({ updateDataList }) => {
   const [tickers, setTickers] = useState<string[]>([]);
   const [filteredTickers, setFilteredTickers] = useState<string[]>([]);
   const [selectedTicker, setSelectedTicker] = useState('');
-  const apiKey = 'IWOK33HKCS8IRUUU';
 
   async function getTickerList() {
     try {

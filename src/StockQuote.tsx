@@ -3,15 +3,18 @@ import axios from 'axios';
 import styled from 'styled-components/native';
 
 interface StockQuoteProps {
-    symbol: string; // Símbolo do ativo (ex: PETR4.SA)
+    symbol: string; // Símbolo do ativo (ex: PETR4)
+}
+interface StockQuoteChangeProps {
+    changeValue: number;
 }
 
 const StockQuoteContainer = styled.TouchableOpacity`
-  padding: 10px;
+  padding: 20px;
   margin: 10px;
-  border-radius: 50px;
-  background: #b7adad;
-  box-shadow: 20px 20px 60px #bebebe;
+  border-radius: 40px;
+  background: #e6dcc1;
+  box-shadow: 5px 5px 5px #bebebe;
 `;
 
 const StockQuoteText = styled.Text`
@@ -20,9 +23,21 @@ const StockQuoteText = styled.Text`
   color: #333;
 `;
 
+const StockQuoteSubText = styled.Text`
+  font-size: 11px;
+  color: #6d6969;
+  margin-bottom: 20px;
+`;
+
+const StockQuoteChange = styled.Text<StockQuoteChangeProps>`
+  font-size: 12px;
+  color: ${({ changeValue }) => (changeValue > 0 ? 'green' : 'red')};
+  `;
+
 const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
     const [quote, setQuote] = useState<number | null>(null);
-    const apiKey = 'IWOK33HKCS8IRUUU';
+    const [stock, setStock] = useState<any>();
+    const [regularMarketChange, setRegularMarketChange] = useState<number>(0);
 
     useEffect(() => {
         let isMounted = true;
@@ -36,8 +51,9 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
                 const quoteData = response.data.results[0];
 
                 if (quoteData && isMounted) {
-
+                    setStock(quoteData);
                     setQuote(quoteData.regularMarketPrice);
+                    setRegularMarketChange(quoteData.regularMarketChange);
                 }
             } catch (error) {
                 console.error('Erro ao buscar a cotação do ativo:', error);
@@ -60,8 +76,12 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
 
     return (
         <StockQuoteContainer>
-            <StockQuoteText>{symbol}</StockQuoteText>
+            <StockQuoteText>{stock.symbol}</StockQuoteText>
+            <StockQuoteSubText>{stock.shortName}</StockQuoteSubText>
             <StockQuoteText>R$ {quote.toFixed(2)}</StockQuoteText>
+            <StockQuoteChange changeValue={regularMarketChange}>
+                {regularMarketChange.toFixed(2)}%
+            </StockQuoteChange>
         </StockQuoteContainer>
     );
 };
