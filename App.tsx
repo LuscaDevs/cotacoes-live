@@ -1,4 +1,7 @@
-// App.tsx
+/**
+ * Componente principal do aplicativo.
+ * Exibe uma lista de cotações de estoque e permite adicionar novos estoques à lista.
+ */
 
 import React, { useState } from 'react';
 import { ScrollView, View, KeyboardAvoidingView, Platform, Text } from 'react-native';

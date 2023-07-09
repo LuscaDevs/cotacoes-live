@@ -1,3 +1,8 @@
+/**
+ * Componente para exibir a cotação de um ativo.
+ * @param {string} symbol - O símbolo do ativo para recuperar a cotação.
+ */
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components/native';

@@ -1,3 +1,8 @@
+/**
+ * Função para buscar os símbolos disponíveis através da API Brapi.
+ * @returns {string[]} - Array contendo os símbolos dos ativos disponíveis.
+ */
+
 import axios from "axios";
 
 const BrapiAvaiableStocks = async () => {

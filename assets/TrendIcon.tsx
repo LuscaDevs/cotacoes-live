@@ -1,3 +1,9 @@
+/**
+ * Componente de ícone de tendência.
+ * Exibe uma seta para cima, para baixo ou sem variação, dependendo do valor de mudança fornecido.
+ * @param {number} changeValue - O valor de mudança para determinar a direção do ícone.
+ */
+
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 

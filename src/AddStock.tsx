@@ -1,4 +1,8 @@
-// AddStock.tsx
+/**
+ * Componente para adicionar um novo ativo à lista.
+ * Exibe uma caixa de entrada de texto para inserir o símbolo do ativo e uma lista de sugestões de símbolos correspondentes.
+ * @param {function} updateDataList - Função para atualizar a lista de dados com um novo estoque.
+ */
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
