@@ -30,7 +30,7 @@ export const Trending: React.FC<IconProps> = ({ changeValue }) => {
     }
 
     return (
-        <Svg width="24" height="24" viewBox="0 0 24 24" >
+        <Svg width="24" height="24" viewBox="0 0 24 24" style={{ marginLeft: 8 }}>
             <Path d={iconPath} fill={iconColor} />
         </Svg>
     );

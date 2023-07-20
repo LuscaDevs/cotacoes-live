@@ -8,43 +8,45 @@ import axios from 'axios';
 import styled from 'styled-components/native';
 import { Trending } from '../assets/TrendIcon';
 import { Text } from 'react-native';
+import { NavigationProp } from '@react-navigation/native';
 
 interface StockQuoteProps {
     symbol: string; // Símbolo do ativo (ex: PETR4)
+    navigation: NavigationProp<any>;
 }
 interface StockQuoteChangeProps {
     changeValue: number;
 }
 
 const StockQuoteContainer = styled.TouchableOpacity`
-  padding: 20px;
-  margin: 10px;
-  border-radius: 40px;
-  background: #e6dcc1;
-  box-shadow: 5px 5px 5px #bebebe;
-`;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 40px;
+    background: #e6dcc1;
+    box-shadow: 5px 5px 5px #bebebe;
+    `;
 
 const StockQuoteText = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-`;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    `;
 
 const StockQuoteSubText = styled.Text`
-  font-size: 11px;
-  color: #6d6969;
-  margin-bottom: 20px;
-`;
+    font-size: 11px;
+    color: #6d6969;
+    margin-bottom: 20px;
+    `;
 
 const StockQuoteChange = styled.View`
-  font-size: 12px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
+    font-size: 12px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    `;
 
 const StockQuoteVariation = styled.Text<StockQuoteChangeProps>`
-    color: ${({ changeValue }) => {
+        color: ${({ changeValue }) => {
         if (changeValue > 0) {
             return 'green';
         } else if (changeValue < 0) {
@@ -53,9 +55,12 @@ const StockQuoteVariation = styled.Text<StockQuoteChangeProps>`
             return '#6d6969';
         }
     }};
-`;
+    `;
 
-const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
+const StockQuote: React.FC<StockQuoteProps> = ({ symbol, navigation }) => {
+    const handleStockQuoteClick = () => {
+        navigation.navigate('Detalhes'); // Use a prop navigation para navegar para 'Detalhes'
+    };
     const [quote, setQuote] = useState<number | null>(null);
     const [stock, setStock] = useState<any>();
     const [regularMarketChange, setRegularMarketChange] = useState<number>(0);
@@ -96,7 +101,7 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol }) => {
     }
 
     return (
-        <StockQuoteContainer>
+        <StockQuoteContainer onPress={handleStockQuoteClick}>
             <StockQuoteText>{stock.symbol}</StockQuoteText>
             <StockQuoteSubText>{stock.shortName}</StockQuoteSubText>
             <StockQuoteText>R$ {quote.toFixed(2)}</StockQuoteText>
