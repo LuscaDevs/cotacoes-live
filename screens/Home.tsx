@@ -2,11 +2,12 @@ import React from 'react';
 import { Platform, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native'; // Importe o hook useNavigation
+import { useNavigation } from '@react-navigation/native'; // Corrigido para NavigationProp
+
 import StockQuote from '../src/StockQuote';
 import AddStock from '../src/AddStock';
 
-const ContainerApp = styled.KeyboardAvoidingView`
+const ContainerHome = styled.KeyboardAvoidingView`
   flex: 1;
   background-color: #fff;
   justify-content: space-between;
@@ -29,24 +30,24 @@ const Home: React.FC = () => {
         setStocksList((prevList) => [...prevList, ...newList]);
     };
 
-    const navigation = useNavigation(); // Use o hook useNavigation para obter a função de navegação
+    const navigation = useNavigation(); // Usa o tipo StockQuoteNavigationProp
 
     return (
-        <ContainerApp behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ContainerHome behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 75 : 0}>
             <ScrollView>
                 <ContainerStocks>
                     {stocksList.map((stock, index) => (
                         <StockQuote
                             key={index}
                             symbol={stock.symbol}
-                            navigation={navigation} // Passe a função de navegação como prop
+                            navigation={navigation} // Passa a propriedade navigation corretamente
                         />
                     ))}
                 </ContainerStocks>
             </ScrollView>
 
             <AddStock updateDataList={updateDataList} />
-        </ContainerApp>
+        </ContainerHome>
     );
 };
 

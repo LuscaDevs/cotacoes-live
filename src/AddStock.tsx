@@ -6,11 +6,11 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Platform, Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 import BrapiAvaiableStocks from './BrapiAvaiableStocks';
 
-const ContainerAddStock = styled.View`
+const ContainerAddStock = styled.KeyboardAvoidingView`
   flex-direction: column;
   justify-content: space-evenly;
   margin: 20px;
