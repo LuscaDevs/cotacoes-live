@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native'
 import styled from 'styled-components/native';
 import { RootStackParamList } from '../src/AppNavigator';
-import { RouteProp } from '@react-navigation/native';
 import { StockData } from '../src/StockAPI';
 
 

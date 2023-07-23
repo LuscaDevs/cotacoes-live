@@ -16,11 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "config": {
-        "icon": {
-          "tintColor": "transparent"
-        }
-      }
+      "config": {}
     },
     "android": {
       "adaptiveIcon": {

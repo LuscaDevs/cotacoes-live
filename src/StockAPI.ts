@@ -56,13 +56,10 @@ function calculateDividendYieldLast12Months(stock: StockData): number {
             totalDividends += dividend.rate;
         }
     });
-    console.log(totalDividends / currentPrice);
-
     // Arredondar para 2 casas decimais
     totalDividends = Math.round(totalDividends * 100) / 100;
     // Calcula o Dividend Yield em %
     const dividendYieldPercentage = ((totalDividends / currentPrice) * 100 / 2);
-    console.log(dividendYieldPercentage);
     return dividendYieldPercentage;
 }
 
