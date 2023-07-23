@@ -40,7 +40,7 @@ const Home: React.FC = () => {
                         <StockQuote
                             key={index}
                             symbol={stock.symbol}
-                            navigation={navigation} // Passa a propriedade navigation corretamente
+                            navigation={navigation}
                         />
                     ))}
                 </ContainerStocks>

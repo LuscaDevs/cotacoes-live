@@ -15,9 +15,9 @@ export interface StockData {
 }
 
 interface Dividend {
+    assetIssued: string;
     paymentDate: string;
     rate: number;
-    label: string;
 }
 
 interface DividendData {
@@ -30,6 +30,18 @@ function getCashDividends(stockData: StockData): Dividend[] {
     }
     return [];
 }
+
+// Função auxiliar para verificar se o assetIssued atende às condições
+function isValidAssetIssued(symbol: string, assetIssued: string): boolean {
+    return (
+        (symbol.includes('4') && assetIssued.includes('ACNPR')) ||
+        (symbol.includes('3') && assetIssued.includes('ACNOR')) ||
+        (symbol.includes('11') && (assetIssued.includes('CTF') || assetIssued.includes('CDAM'))) ||
+        (symbol.includes('6') && assetIssued.includes('ACNPB')) ||
+        (symbol.includes('5') && assetIssued.includes('ACNPA'))
+    );
+}
+
 
 function calculateDividendYieldLast12Months(stock: StockData): number {
     // Preço atual da ação
@@ -51,9 +63,11 @@ function calculateDividendYieldLast12Months(stock: StockData): number {
     // Percorre os dividendos
     dividendsData.forEach((dividend) => {
         const paymentDate = new Date(dividend.paymentDate);
-
         if (paymentDate >= twelveMonthsAgo && !isNaN(dividend.rate)) {
-            totalDividends += dividend.rate;
+            // Verifica se o assetIssued atende às condições e só então soma o rate
+            if (isValidAssetIssued(stock.symbol, dividend.assetIssued)) {
+                totalDividends += dividend.rate;
+            }
         }
     });
 
