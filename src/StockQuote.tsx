@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Trending } from '../assets/TrendIcon';
 import StockAPI, { StockData } from './StockAPI';
+import { View } from 'react-native';
+import { SvgUri } from 'react-native-svg';
 
 
 type StockQuoteProps = {
@@ -15,23 +17,24 @@ interface StockQuoteChangeProps {
     changeValue: number;
 }
 
-const StockQuoteContainer = styled.TouchableOpacity`
+export const StockQuoteContainer = styled.TouchableOpacity`
   padding: 20px;
   margin: 10px;
   border-radius: 40px;
-  background: #e6dcc1;
-  box-shadow: 5px 5px 5px #bebebe;
+  background: #F4fefd;
+  box-shadow: 5px 5px 5px #3a4f50;
 `;
 
-const StockQuoteText = styled.Text`
+export const StockQuoteText = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: #3a4f50;
+  text-align: center;
 `;
 
-const StockQuoteSubText = styled.Text`
+export const StockQuoteSubText = styled.Text`
   font-size: 11px;
-  color: #6d6969;
+  color: #3a4f50;
   margin-bottom: 20px;
 `;
 
@@ -52,6 +55,11 @@ const StockQuoteVariation = styled.Text<StockQuoteChangeProps>`
             return '#6d6969';
         }
     }};
+`;
+
+const StockQuoteLogo = styled.View`
+    align-items: center;
+    margin-bottom: 10px;
 `;
 
 const StockQuote: React.FC<StockQuoteProps> = ({ symbol, navigation }) => {
@@ -86,6 +94,9 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol, navigation }) => {
 
     return (
         <StockQuoteContainer onPress={handleStockQuoteClick}>
+            <StockQuoteLogo>
+                <SvgUri uri={stock.logourl} />
+            </StockQuoteLogo>
             <StockQuoteText>{stock?.symbol}</StockQuoteText>
             <StockQuoteSubText>{stock?.shortName}</StockQuoteSubText>
             <StockQuoteText>R$ {stock?.regularMarketPrice.toFixed(2)}</StockQuoteText>

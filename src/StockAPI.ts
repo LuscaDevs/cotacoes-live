@@ -12,7 +12,20 @@ export interface StockData {
     fiftyTwoWeekRange: string;
     dividendsData: DividendData;
     dividendYield: number;
+    historicalDataPrice: IHistoricalDataPrice[];
+    twelveMonthsVariationPercent: number;
+    logourl: string;
 }
+export interface IHistoricalDataPrice {
+    date: number;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    volume: number;
+    adjustedClose: number;
+}
+
 
 interface Dividend {
     assetIssued: string;
@@ -70,17 +83,51 @@ function calculateDividendYieldLast12Months(stock: StockData): number {
             }
         }
     });
-
     // Calcula o Dividend Yield em %
     const dividendYieldPercentage = (totalDividends / currentPrice) * 100;
     return dividendYieldPercentage;
 }
 
+function getTwelveMonthsVariationPercent(stock: StockData): number {
+    const currentPrice = stock.regularMarketPrice;
+    const historicalData = stock.historicalDataPrice;
+
+    // Data atual
+    const currentDate = new Date();
+
+    // Data de 12 meses atrás a partir da data atual
+    const twelveMonthsAgo = new Date(currentDate);
+    twelveMonthsAgo.setFullYear(currentDate.getFullYear() - 1);
+
+    // Verifica se a data de 12 meses atrás é um sábado (6) ou domingo (0)
+    const dayOfWeekTwelveMonthsAgo = twelveMonthsAgo.getDay();
+    if (dayOfWeekTwelveMonthsAgo === 0) { // Domingo
+        twelveMonthsAgo.setDate(twelveMonthsAgo.getDate() - 2); // Obtém a sexta-feira anterior
+    } else if (dayOfWeekTwelveMonthsAgo === 6) { // Sábado
+        twelveMonthsAgo.setDate(twelveMonthsAgo.getDate() - 1); // Obtém a sexta-feira anterior
+    }
+
+    const lastTwelveMonthsData = historicalData.filter(
+        (data) => new Date(data.date * 1000) >= twelveMonthsAgo
+    );
+
+    const twelveMonthsAgoPrice =
+        lastTwelveMonthsData.length > 0
+            ? lastTwelveMonthsData[0].adjustedClose
+            : stock.regularMarketPrice;
+
+    // Calcula a variação percentual entre o preço atual e o preço de 12 meses atrás
+    const variationPercent = ((currentPrice - twelveMonthsAgoPrice) / twelveMonthsAgoPrice) * 100;
+
+    return variationPercent;
+}
+
+
 class StockAPI {
     static async fetchStockData(symbol: string): Promise<StockData | null> {
         try {
             const response = await axios.get(
-                `https://brapi.dev/api/quote/${symbol}?interval=ytd&fundamental=true&dividends=true`
+                `https://brapi.dev/api/quote/${symbol}?range=1y&interval=1d&fundamental=true&dividends=true`
             );
 
             const stockData = response.data.results[0];
@@ -96,7 +143,10 @@ class StockAPI {
                     regularMarketDayRange: stockData.regularMarketDayRange,
                     fiftyTwoWeekRange: stockData.fiftyTwoWeekRange,
                     dividendYield: calculateDividendYieldLast12Months(stockData),
-                    dividendsData: stockData.dividendsData
+                    dividendsData: stockData.dividendsData,
+                    historicalDataPrice: stockData.historicalDataPrice,
+                    twelveMonthsVariationPercent: getTwelveMonthsVariationPercent(stockData),
+                    logourl: stockData.logourl
                 };
             } else {
                 return null;

@@ -9,7 +9,7 @@ import AddStock from '../src/AddStock';
 
 const ContainerHome = styled.KeyboardAvoidingView`
   flex: 1;
-  background-color: #fff;
+  background-color: #1B2223;
   justify-content: space-between;
 `;
 

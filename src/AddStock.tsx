@@ -17,10 +17,10 @@ const ContainerAddStock = styled.KeyboardAvoidingView`
 `;
 
 const StockInput = styled.TextInput`
-  border-width: 1px;
   border-radius: 8px;
   width: 100%;
   padding: 10px;
+  background-color: #F4fefd;
 `;
 
 const StockListView = styled.TouchableOpacity`
@@ -29,6 +29,7 @@ const StockListView = styled.TouchableOpacity`
   width: 100%;
   padding: 10px;
   margin-bottom: 5px;
+  background-color: #F4fefd;
 `;
 
 interface Stock {
