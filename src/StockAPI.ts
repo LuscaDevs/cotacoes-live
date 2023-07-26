@@ -124,10 +124,10 @@ function getTwelveMonthsVariationPercent(stock: StockData): number {
 
 
 class StockAPI {
-    static async fetchStockData(symbol: string): Promise<StockData | null> {
+    static async fetchStockData(symbol: string, range: string = '1y', interval: string = '1d'): Promise<StockData | null> {
         try {
             const response = await axios.get(
-                `https://brapi.dev/api/quote/${symbol}?range=1y&interval=1d&fundamental=true&dividends=true`
+                `https://brapi.dev/api/quote/${symbol}?range=${range}&interval=${interval}&fundamental=true&dividends=true`
             );
 
             const stockData = response.data.results[0];

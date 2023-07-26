@@ -3,6 +3,7 @@ import { Dimensions, Text, View } from 'react-native'
 import styled from 'styled-components/native';
 import { RootStackParamList } from '../src/AppNavigator';
 import { StockQuoteContainer, StockQuoteText } from '../src/StockQuote';
+import { TwelveMonthsChart } from '../src/StockChart';
 
 const StockDetailsContainer = styled.View`
     background-color: #1b2223;
@@ -20,9 +21,25 @@ const ContainerHome = styled.KeyboardAvoidingView`
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Detalhes'>
 
-const StockDetails: React.FC<Props> = ({ route }) => {
+const StockDetails: React.FC<Props> = ({ route, navigation }) => {
 
     const stock = route.params.stock;
+
+    const handleStockContainerClick = (type: string) => {
+        switch (type) {
+            case 'VariacaoDiaria':
+                navigation.navigate('VariacaoDiaria', { stock });
+                break;
+            case 'Dividendos':
+                if (stock.dividendYield > 0) {
+                    navigation.navigate('Dividendos', { stock });
+                    break;
+                }
+
+            default:
+                break;
+        }
+    };
 
     return (
         <ContainerHome>
@@ -30,17 +47,17 @@ const StockDetails: React.FC<Props> = ({ route }) => {
                 <StockQuoteContainer>
                     <StockQuoteText>{stock.longName}</StockQuoteText>
                 </StockQuoteContainer>
-                <StockQuoteContainer>
-                    <StockQuoteText>Variação ({stock.currency})</StockQuoteText>
+                <StockQuoteContainer onPress={() => handleStockContainerClick('VariacaoDiaria')}>
+                    <StockQuoteText>Variação Diária ({stock.currency})</StockQuoteText>
                     <StockQuoteText> Mín. {stock.regularMarketDayRange} Máx.</StockQuoteText>
                 </StockQuoteContainer>
                 <StockQuoteContainer>
                     <StockQuoteText>Variação 52 semanas ({stock.currency})</StockQuoteText>
                     <StockQuoteText>Mín. {stock.fiftyTwoWeekRange} Máx.</StockQuoteText>
                 </StockQuoteContainer>
-                <StockQuoteContainer>
+                <StockQuoteContainer onPress={() => handleStockContainerClick('Dividendos')}>
                     <StockQuoteText>Dividend Yield </StockQuoteText>
-                    <StockQuoteText>{stock.dividendYield.toFixed(2)}%</StockQuoteText>
+                    <StockQuoteText>{stock.dividendYield > 0 ? `${stock.dividendYield.toFixed(2)}%` : 'Sem dados'}</StockQuoteText>
                 </StockQuoteContainer>
                 <StockQuoteContainer>
                     <StockQuoteText>Valorização (12meses) </StockQuoteText>
@@ -50,6 +67,8 @@ const StockDetails: React.FC<Props> = ({ route }) => {
                 <Text></Text>
 
             </StockDetailsContainer>
+            <TwelveMonthsChart {...stock} />
+
         </ContainerHome>
 
     );

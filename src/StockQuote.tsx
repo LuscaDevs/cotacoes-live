@@ -95,7 +95,7 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol, navigation }) => {
     return (
         <StockQuoteContainer onPress={handleStockQuoteClick}>
             <StockQuoteLogo>
-                <SvgUri uri={stock.logourl} />
+                <SvgUri uri={stock.logourl} width={56} height={56} />
             </StockQuoteLogo>
             <StockQuoteText>{stock?.symbol}</StockQuoteText>
             <StockQuoteSubText>{stock?.shortName}</StockQuoteSubText>
