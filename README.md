@@ -10,6 +10,8 @@ O aplicativo Stock Tracker foi desenvolvido utilizando as seguintes tecnologias:
 - **TypeScript**: para adicionar tipagem estática ao código e melhorar a robustez.
 - **Axios**: para fazer requisições HTTP e obter dados das cotações de ações.
 - **Styled Components**: para estilizar os componentes de forma elegante e modular.
+- **Victory Native**: para criação dos gráficos.
+- **Brapi**: para obter dados dos ativos.
 
 ## Funcionalidades
 
