@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Trending } from '../assets/TrendIcon';
 import StockAPI, { StockData } from './StockAPI';
-import { View } from 'react-native';
+import { Image, Platform, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
 
@@ -95,7 +95,9 @@ const StockQuote: React.FC<StockQuoteProps> = ({ symbol, navigation }) => {
     return (
         <StockQuoteContainer onPress={handleStockQuoteClick}>
             <StockQuoteLogo>
-                <SvgUri uri={stock.logourl} width={56} height={56} />
+                {Platform.OS === 'ios' ?
+                    (<SvgUri uri={stock.logourl} width={56} height={56} />) :
+                    (<Image source={{ uri: stock.logourl }} resizeMode='contain' style={{ width: 56, height: 56 }} />)}
             </StockQuoteLogo>
             <StockQuoteText>{stock?.symbol}</StockQuoteText>
             <StockQuoteSubText>{stock?.shortName}</StockQuoteSubText>
